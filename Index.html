@@ -2,38 +2,44 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Unsere Zeit zusammen</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Unsere Zeit</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to right, #ffe6f0, #ffe2e9);
+      background: linear-gradient(to right, #ffe0ec, #ffecf2);
       color: #880e4f;
       text-align: center;
-      padding: 50px 20px;
+      padding: 40px 20px;
     }
 
     h1 {
       font-size: 2.5em;
-      margin-bottom: 0.5em;
+      margin-bottom: 10px;
     }
 
-    .counter {
-      font-size: 2em;
+    #gesamt {
+      font-size: 1.6em;
+      margin-bottom: 30px;
+      color: #ad1457;
+    }
+
+    .time-box {
+      font-size: 2.5em;
+      margin: 15px 0 5px 0;
       font-weight: bold;
-      margin: 10px 0;
     }
 
     .label {
-      font-size: 1.2em;
-      color: #ad1457;
+      font-size: 1.1em;
+      color: #6a1b4d;
     }
 
     .heart {
       font-size: 3em;
-      margin-bottom: 20px;
-      animation: beat 1s infinite;
       color: red;
+      animation: beat 1s infinite;
+      margin-bottom: 20px;
     }
 
     @keyframes beat {
@@ -45,18 +51,19 @@
 <body>
 
   <div class="heart">❤️</div>
-  <h1>Wir sind zusammen seit dem<br>10. Januar 2015</h1>
+  <h1>Wir sind seit dem 10. Januar 2015 zusammen</h1>
+  <div id="gesamt">Berechnung …</div>
 
-  <div class="counter" id="days">0</div>
+  <div class="time-box" id="tage">0</div>
   <div class="label">Tage</div>
 
-  <div class="counter" id="hours">0</div>
+  <div class="time-box" id="stunden">0</div>
   <div class="label">Stunden</div>
 
-  <div class="counter" id="minutes">0</div>
+  <div class="time-box" id="minuten">0</div>
   <div class="label">Minuten</div>
 
-  <div class="counter" id="seconds">0</div>
+  <div class="time-box" id="sekunden">0</div>
   <div class="label">Sekunden</div>
 
   <script>
@@ -64,17 +71,30 @@
 
     function updateLoveTime() {
       const now = new Date();
-      const diffMs = now - startDate;
+      const diff = now - startDate;
 
-      const seconds = Math.floor(diffMs / 1000);
+      // Gesamtzeit in Einheiten
+      const seconds = Math.floor(diff / 1000);
       const minutes = Math.floor(seconds / 60);
       const hours = Math.floor(minutes / 60);
       const days = Math.floor(hours / 24);
 
-      document.getElementById("days").textContent = days.toLocaleString();
-      document.getElementById("hours").textContent = (days * 24).toLocaleString();
-      document.getElementById("minutes").textContent = (days * 24 * 60).toLocaleString();
-      document.getElementById("seconds").textContent = (days * 24 * 60 * 60 + (hours % 24) * 3600 + (minutes % 60) * 60 + (seconds % 60)).toLocaleString();
+      // Für Live-Zähler
+      const remainingSeconds = seconds % 60;
+      const remainingMinutes = minutes % 60;
+      const remainingHours = hours % 24;
+
+      // Für Gesamtübersicht oben
+      const totalMonths = (now.getFullYear() - startDate.getFullYear()) * 12 + (now.getMonth() - startDate.getMonth());
+      const years = Math.floor(totalMonths / 12);
+      const months = totalMonths % 12;
+
+      // Anzeige aktualisieren
+      document.getElementById("gesamt").textContent = `${years} Jahre, ${months} Monate`;
+      document.getElementById("tage").textContent = days.toLocaleString();
+      document.getElementById("stunden").textContent = (days * 24 + remainingHours).toLocaleString();
+      document.getElementById("minuten").textContent = (days * 24 * 60 + remainingHours * 60 + remainingMinutes).toLocaleString();
+      document.getElementById("sekunden").textContent = (days * 24 * 60 * 60 + remainingHours * 3600 + remainingMinutes * 60 + remainingSeconds).toLocaleString();
     }
 
     setInterval(updateLoveTime, 1000);
