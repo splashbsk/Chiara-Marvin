@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unsere Zeit zusammen</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #ffe6f0, #ffe2e9);
+      color: #880e4f;
+      text-align: center;
+      padding: 50px 20px;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 0.5em;
+    }
+
+    .counter {
+      font-size: 2em;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    .label {
+      font-size: 1.2em;
+      color: #ad1457;
+    }
+
+    .heart {
+      font-size: 3em;
+      margin-bottom: 20px;
+      animation: beat 1s infinite;
+      color: red;
+    }
+
+    @keyframes beat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="heart">❤️</div>
+  <h1>Wir sind zusammen seit dem<br>10. Januar 2015</h1>
+
+  <div class="counter" id="days">0</div>
+  <div class="label">Tage</div>
+
+  <div class="counter" id="hours">0</div>
+  <div class="label">Stunden</div>
+
+  <div class="counter" id="minutes">0</div>
+  <div class="label">Minuten</div>
+
+  <div class="counter" id="seconds">0</div>
+  <div class="label">Sekunden</div>
+
+  <script>
+    const startDate = new Date("2015-01-10T00:00:00");
+
+    function updateLoveTime() {
+      const now = new Date();
+      const diffMs = now - startDate;
+
+      const seconds = Math.floor(diffMs / 1000);
+      const minutes = Math.floor(seconds / 60);
+      const hours = Math.floor(minutes / 60);
+      const days = Math.floor(hours / 24);
+
+      document.getElementById("days").textContent = days.toLocaleString();
+      document.getElementById("hours").textContent = (days * 24).toLocaleString();
+      document.getElementById("minutes").textContent = (days * 24 * 60).toLocaleString();
+      document.getElementById("seconds").textContent = (days * 24 * 60 * 60 + (hours % 24) * 3600 + (minutes % 60) * 60 + (seconds % 60)).toLocaleString();
+    }
+
+    setInterval(updateLoveTime, 1000);
+    updateLoveTime();
+  </script>
+
+</body>
+</html>
